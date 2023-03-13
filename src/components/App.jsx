@@ -3,6 +3,7 @@ import List from "./List/List";
 import ContactEditor from "./ContactEditor/ContactEditor";
 import { nanoid } from 'nanoid';
 import { Filter } from "./Filter/Filter";
+import { Container } from "./App.styled";
 
 
  export class App extends Component {
@@ -14,9 +15,7 @@ import { Filter } from "./Filter/Filter";
     {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
   ],
   filter: '',
-  name: '',
-  number: ''
-   }
+  }
    
    addContact = data => {
      const newUser = {
@@ -53,12 +52,13 @@ import { Filter } from "./Filter/Filter";
      const visibleContacts = this.getVisibleContacts();
 
      return (
-       <>
-         {}
+       <Container>
+         <h1>Phonebook</h1>
          <ContactEditor addContact={this.addContact} />
+         <h2>Contacts</h2>
          <Filter value={this.state.filter} onChange={this.changeFilter} />
          <List contacts={visibleContacts} onDeleteContact={this.deleteContact} />
-         </>
+         </Container>
     )
   }
 }
