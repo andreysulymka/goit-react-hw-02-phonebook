@@ -1,5 +1,8 @@
 import { Component } from "react";
-import List from "./List";
+import List from "./List/List";
+import ContactEditor from "./ContactEditor/ContactEditor";
+import { nanoid } from 'nanoid';
+import { Filter } from "./Filter/Filter";
 
 
  export class App extends Component {
@@ -13,19 +16,48 @@ import List from "./List";
   filter: '',
   name: '',
   number: ''
-}
+   }
+   
+   addContact = data => {
+     const newUser = {
+    id: nanoid(),
+       name: data.name,
+     number: data.number
+     }
+     const existingContact = this.state.contacts.find((element) =>
+      element.name.toLowerCase() === data.name.toLowerCase()
+    );
+    if(existingContact) {
+      window.alert(`${data.name} is already in contacts`);
+      return;
+    }; 
+     this.setState(prevState => ({
+       contacts: [newUser, ...prevState.contacts]
+     }))
+   }
 
    deleteContact = (contactId) => {
      this.setState(prevState => ({
        contacts: prevState.contacts.filter(contact=> contact.id !==contactId)
      }))
    }
+   changeFilter = e => {
+     this.setState({filter: e.currentTarget.value})
+   }
+   getVisibleContacts = () => {
+     const normalizedContacts = this.state.filter.toLowerCase();
+     return this.state.contacts.filter(contact => contact.name.toLowerCase().includes(normalizedContacts))
+   }
   
    render() {
-     const { contacts } = this.state;
+     const visibleContacts = this.getVisibleContacts();
+
      return (
-          <>
-         <List contacts={contacts} onDeleteContact={this.deleteContact } />
+       <>
+         {}
+         <ContactEditor addContact={this.addContact} />
+         <Filter value={this.state.filter} onChange={this.changeFilter} />
+         <List contacts={visibleContacts} onDeleteContact={this.deleteContact} />
          </>
     )
   }
